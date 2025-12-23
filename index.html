@@ -1,64 +1,114 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Zen Browser</title>
+    <title>Wellness Browser</title>
     <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<!-- HOME -->
-<div id="home" class="home">
-    <div class="center">
-        <div class="searchRow">
-            <span class="g">G</span>
-            <input id="searchInput" type="text" placeholder="Search the web" />
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="dashboard">
+
+        <!-- LEFT PANEL: Notifications & Exercise -->
+        <div class="leftPanel">
+            <div class="card exerciseCard">
+                <h3>Movement Tracking</h3>
+                <div id="exerciseStatus">Status: Resting</div>
+                <div id="exerciseCount">Squats: 0</div>
+                <video id="selfieVideo" autoplay muted></video>
+                <div class="exerciseOverlay">
+                    <p>1. Calm down performing this exercise</p>
+                    <div class="detectionBox">Movement Detected</div>
+                </div>
+            </div>
         </div>
 
-        <div class="dots">
-            <span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span>
+        <!-- CENTER PANEL: Search & Apps -->
+        <div class="centerPanel">
+            <!-- Search Bar -->
+            <div class="searchContainer">
+                <span class="g-logo">G</span>
+                <input id="searchInput" type="text" placeholder="Search the web" />
+                <div class="searchIcons">
+                    <span>🎤</span>
+                    <span>📷</span>
+                </div>
+            </div>
+
+            <!-- Quick Apps -->
+            <div class="quickApps">
+                <div class="appCircle"></div>
+                <div class="appCircle"></div>
+                <div class="appCircle"></div>
+                <div class="appCircle"></div>
+                <div class="appCircle"></div>
+                <div class="appCircle"></div>
+                <div class="appCircle"></div>
+            </div>
+
+            <!-- Widgets Row -->
+            <div class="widgetsRow">
+                <div class="widget weatherWidget">
+                    <div class="widgetHeader">Loading...</div>
+                    <div class="widgetContent" id="weatherData">Create backend conn...</div>
+                </div>
+                <div class="widget graphWidget">
+                    <div class="widgetHeader">Market</div>
+                    <div id="stocksData">Loading...</div>
+                </div>
+                <div class="widget newsWidget">
+                    <div class="widgetHeader">Top Stories</div>
+                    <div id="newsData">Loading...</div>
+                </div>
+            </div>
         </div>
 
-        <div class="appsHeader">
-            <div class="appsTitle">Fav Updates</div>
-            <button id="addAppBtn" class="addAppBtn">＋ Add</button>
+        <!-- RIGHT PANEL: Spotify & Profile -->
+        <div class="rightPanel">
+            <div class="card musicCard">
+                <div class="musicHeader">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
+                        alt="Spotify" width="20">
+                    <span>Spotify</span>
+                </div>
+                <div class="musicControls">
+                    <button>⏮</button>
+                    <button>▶</button>
+                    <button>⏭</button>
+                </div>
+            </div>
+
+            <div class="card faceCard">
+                <div class="faceHeader">
+                    <span>Facial Reco</span>
+                </div>
+                <div class="faceStatus" id="authStatus">Scanning...</div>
+                <div class="facesilhouette">👤</div>
+            </div>
+
+            <div class="settingsIcon">⚙</div>
         </div>
 
-        <div id="appsGrid" class="appsGrid"></div>
-    </div>
-</div>
-
-<!-- WEB -->
-<div id="webWrap" class="webWrap hidden">
-
-    <!-- TOP BAR -->
-    <div class="topBar">
-        <button id="backBtn">◀</button>
-        <button id="forwardBtn">▶</button>
-        <button id="reloadBtn">⟳</button>
-        <input id="urlBar" type="text" />
-        <button id="homeBtn">⌂</button>
     </div>
 
-    <!-- CONTENT -->
-    <webview
-            id="webview"
-            class="webview"
-            partition="persist:zen"
-            allowpopups>
-    </webview>
-
-    <!-- 🔽 BOTTOM TAB BAR -->
-    <div id="tabBar" class="tabBar">
-        <button id="newTabBtn" class="newTabBtn">＋</button>
-        <div id="tabs"></div>
+    <!-- WEBVIEW WRAPPER (Hidden by default) -->
+    <div id="webWrap" class="webWrap hidden">
+        <div class="topBar">
+            <button id="backBtn">◀</button>
+            <button id="forwardBtn">▶</button>
+            <button id="reloadBtn">⟳</button>
+            <input id="urlBar" type="text" />
+            <button id="homeBtn">⌂</button>
+        </div>
+        <iframe id="webview" class="webview" src="about:blank"></iframe>
     </div>
 
-</div>
-
-<script src="renderer.js"></script>
+    <script src="renderer.js"></script>
 </body>
+
 </html>

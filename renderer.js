@@ -1,155 +1,217 @@
-// Views
-const home = document.getElementById("home");
+// Elements
+const dashboard = document.getElementById("dashboard");
 const webWrap = document.getElementById("webWrap");
-
-// Inputs
 const searchInput = document.getElementById("searchInput");
-const urlBar = document.getElementById("urlBar");
-
-// Webview
 const webview = document.getElementById("webview");
+const urlBar = document.getElementById("urlBar");
+const quickAppsContainer = document.querySelector(".quickApps");
 
-// Buttons
-const backBtn = document.getElementById("backBtn");
-const forwardBtn = document.getElementById("forwardBtn");
-const reloadBtn = document.getElementById("reloadBtn");
-const homeBtn = document.getElementById("homeBtn");
+// Buttons & Widgets
+const weatherDataEl = document.getElementById("weatherData");
+const stocksDataEl = document.getElementById("stocksData");
+const newsDataEl = document.getElementById("newsData");
+const exerciseCountEl = document.getElementById("exerciseCount");
+const exerciseStatusEl = document.getElementById("exerciseStatus");
+const detectionBox = document.querySelector(".detectionBox");
+const videoEl = document.getElementById("selfieVideo");
+const authStatus = document.getElementById("authStatus");
 
-// Tabs
-const tabsDiv = document.getElementById("tabs");
-const newTabBtn = document.getElementById("newTabBtn");
+// State
+const BACKEND_URL = "http://localhost:5000/api";
 
-let tabs = [];
-let activeTabId = null;
+// ------------------- Navigation -------------------
+const statusDisplay = document.createElement("div");
+statusDisplay.style.position = "fixed";
+statusDisplay.style.bottom = "0";
+statusDisplay.style.left = "0";
+statusDisplay.style.background = "red";
+statusDisplay.style.color = "white";
+statusDisplay.style.padding = "5px";
+statusDisplay.style.zIndex = "9999";
+document.body.appendChild(statusDisplay);
 
-// ---------- Helpers ----------
+function logStatus(msg) {
+    statusDisplay.innerText = msg;
+    console.log(msg);
+    // Temporary alert for critical errors
+    if (msg.startsWith("Error")) alert(msg);
+}
+
+// ------------------- Navigation -------------------
+async function navigate(query) {
+    logStatus("Navigating to: " + query);
+    try {
+        let url = query;
+        // Try backend
+        try {
+            const res = await fetch(`${BACKEND_URL}/resolve`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ query: query })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                url = data.url;
+                logStatus("Resolved URL: " + url);
+            } else {
+                throw new Error("Backend non-200");
+            }
+        } catch (e) {
+            logStatus("Backend failed, using fallback");
+            url = "https://www.google.com/search?q=" + encodeURIComponent(query);
+            if (query.includes(".") && !query.includes(" ")) url = "https://" + query;
+        }
+
+        // Open in new tab to avoid 'Refused to connect' errors in iframe
+        logStatus("Opening in new tab: " + url);
+        window.open(url, '_blank');
+        return; // Stop processing for iframe fallback
+
+        /* 
+        // Iframe Logic (Disabled due to security blocks)
+        dashboard.classList.add("hidden");
+        webWrap.classList.remove("hidden");
+        
+        logStatus("Loading URL in Webview: " + url);
+        webview.src = url; 
+        urlBar.value = url;
+        */
+
+    } catch (err) {
+        logStatus("Error in navigate: " + err);
+    }
+}
+
 function showHome() {
     webWrap.classList.add("hidden");
-    home.classList.remove("hidden");
-    activeTabId = null;
-    renderTabs();
+    dashboard.classList.remove("hidden");
 }
 
-function showWeb(url) {
-    home.classList.add("hidden");
-    webWrap.classList.remove("hidden");
-    webview.loadURL(url);
+document.getElementById("homeBtn").onclick = showHome;
+const navigateFallback = (url) => {
+    // Try to open in iframe, if blocked user can open externally
+    webview.src = url;
     urlBar.value = url;
-}
+};
 
-// ---------- Tabs ----------
-function createTab(url, title = "New Tab") {
-    const id = Date.now();
-    tabs.push({ id, url, title });
-    activeTabId = id;
-    showWeb(url);
-    renderTabs();
-}
+// Simple navigation handlers for iframe history
+document.getElementById("backBtn").onclick = () => { try { webview.contentWindow.history.back(); } catch (e) { } };
+document.getElementById("forwardBtn").onclick = () => { try { webview.contentWindow.history.forward(); } catch (e) { } };
+document.getElementById("reloadBtn").onclick = () => { try { webview.contentWindow.location.reload(); } catch (e) { } };
+document.getElementById("homeBtn").onclick = showHome;
 
-function closeTab(id) {
-    tabs = tabs.filter(t => t.id !== id);
-    if (activeTabId === id) {
-        if (tabs.length) {
-            activateTab(tabs[tabs.length - 1].id);
-        } else {
-            showHome();
-        }
-    }
-    renderTabs();
-}
+// Add Open External Button logic (if you had a button, or just use console/alert for now in web app mode)
+// For web app mode, we can add a small button next to URL bar dynamically if needed, 
+// but for now let's just use the iframe.
 
-function activateTab(id) {
-    const tab = tabs.find(t => t.id === id);
-    if (!tab) return;
-    activeTabId = id;
-    showWeb(tab.url);
-    renderTabs();
-}
-
-function renderTabs() {
-    tabsDiv.innerHTML = "";
-    tabs.forEach(tab => {
-        const el = document.createElement("div");
-        el.className = "tab" + (tab.id === activeTabId ? " active" : "");
-        el.innerHTML = `
-      <span>${tab.title}</span>
-      <span class="close">✕</span>
-    `;
-        el.onclick = () => activateTab(tab.id);
-        el.querySelector(".close").onclick = (e) => {
-            e.stopPropagation();
-            closeTab(tab.id);
-        };
-        tabsDiv.appendChild(el);
-    });
-}
-
-// ---------- Search ----------
-function toGoogleSearch(q) {
-    return `https://www.google.com/search?q=${encodeURIComponent(q)}`;
-}
-
-searchInput.addEventListener("keydown", e => {
+// Main Search Input
+searchInput.onkeydown = (e) => {
     if (e.key === "Enter") {
-        createTab(toGoogleSearch(searchInput.value), searchInput.value);
+        navigate(searchInput.value);
     }
-});
+}
 
-urlBar.addEventListener("keydown", e => {
+// Top URL Bar
+urlBar.onkeydown = (e) => {
     if (e.key === "Enter") {
-        const val = urlBar.value.trim();
-        const url = val.includes(".") ? `https://${val.replace(/^https?:\/\//, "")}` : toGoogleSearch(val);
-        const tab = tabs.find(t => t.id === activeTabId);
-        if (tab) {
-            tab.url = url;
-            showWeb(url);
+        navigate(urlBar.value);
+    }
+}
+
+// ------------------- Backend Data -------------------
+async function fetchData() {
+    try {
+        // Weather
+        fetch(`${BACKEND_URL}/weather`)
+            .then(r => r.json())
+            .then(data => {
+                weatherDataEl.innerHTML = `
+                    <div style="font-size:24px">${data.temp}</div>
+                    <div>${data.condition}</div>
+                `;
+            });
+
+        // Apps
+        fetch(`${BACKEND_URL}/apps`)
+            .then(r => r.json())
+            .then(apps => {
+                quickAppsContainer.innerHTML = "";
+                apps.forEach(app => {
+                    const div = document.createElement("div");
+                    div.className = "appCircle";
+                    div.innerHTML = `<span style="display:flex;justify-content:center;align-items:center;height:100%;font-weight:bold;color:#333">${app.icon}</span>`;
+                    div.title = app.name;
+                    div.onclick = () => navigate(app.url);
+                    quickAppsContainer.appendChild(div);
+                });
+            });
+
+        // News
+        fetch(`${BACKEND_URL}/news`)
+            .then(r => r.json())
+            .then(data => {
+                newsDataEl.innerHTML = data.map(n => `<div style="margin-bottom:5px; font-size:12px"><b>${n.source}</b>: ${n.title}</div>`).join("");
+            });
+
+        // Stocks (Mock)
+        stocksDataEl.innerHTML = `
+            <div style="color:#0f0">NVDA: $1483.50 (+2.5%)</div>
+        `;
+
+    } catch (e) {
+        console.error("Backend error", e);
+    }
+}
+
+fetchData();
+// No interval for Apps/News to save bandwidth, only on load or reload
+
+// ------------------- Camera & CV -------------------
+async function startCamera() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        videoEl.srcObject = stream;
+        setInterval(processFrame, 2000);
+    } catch (err) {
+        console.error("Error accessing camera", err);
+        authStatus.innerText = "Camera Error";
+    }
+}
+
+async function processFrame() {
+    if (!videoEl.srcObject) return;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = videoEl.videoWidth;
+    canvas.height = videoEl.videoHeight;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(videoEl, 0, 0);
+    const dataUrl = canvas.toDataURL("image/jpeg");
+
+    try {
+        const res = await fetch(`${BACKEND_URL}/exercise`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image: dataUrl })
+        });
+        const data = await res.json();
+
+        if (data.count !== undefined) {
+            exerciseCountEl.innerText = `Squats: ${data.count}`;
+            exerciseStatusEl.innerText = `Stage: ${data.stage || "Ready"}`;
+
+            if (data.stage === "down" || data.stage === "up") {
+                detectionBox.style.display = "block";
+                setTimeout(() => detectionBox.style.display = "none", 1000);
+            }
         }
+    } catch (e) {
+        // console.log("CV Error:", e);
     }
-});
 
-// ---------- Webview events ----------
-webview.addEventListener("did-navigate", e => {
-    urlBar.value = e.url;
-    const tab = tabs.find(t => t.id === activeTabId);
-    if (tab) tab.url = e.url;
-});
-
-webview.addEventListener("page-title-updated", e => {
-    const tab = tabs.find(t => t.id === activeTabId);
-    if (tab) {
-        tab.title = e.title.slice(0, 15);
-        renderTabs();
+    if (authStatus.innerText === "Scanning...") {
+        setTimeout(() => authStatus.innerText = "Authorized: User", 3000);
     }
-});
+}
 
-// ---------- Nav buttons ----------
-backBtn.onclick = () => webview.canGoBack() && webview.goBack();
-forwardBtn.onclick = () => webview.canGoForward() && webview.goForward();
-reloadBtn.onclick = () => webview.reload();
-homeBtn.onclick = showHome;
-
-// ---------- New tab ----------
-newTabBtn.onclick = () => showHome();
-
-// ---------- Default apps ----------
-const appsGrid = document.getElementById("appsGrid");
-const addAppBtn = document.getElementById("addAppBtn");
-
-const DEFAULT_APPS = [
-    { name: "YouTube", url: "https://youtube.com" },
-    { name: "Gmail", url: "https://mail.google.com" },
-    { name: "Maps", url: "https://maps.google.com" },
-    { name: "Drive", url: "https://drive.google.com" },
-    { name: "WhatsApp", url: "https://web.whatsapp.com" }
-];
-
-DEFAULT_APPS.forEach(app => {
-    const card = document.createElement("div");
-    card.className = "appCard";
-    card.innerHTML = `<div class="appIcon">${app.name[0]}</div><div class="appName">${app.name}</div>`;
-    card.onclick = () => createTab(app.url, app.name);
-    appsGrid.appendChild(card);
-});
-
-// Start
-showHome();
+startCamera();

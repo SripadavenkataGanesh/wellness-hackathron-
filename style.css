@@ -1,227 +1,221 @@
+/* WELLNESS BROWSER THEME */
 :root {
-    --bg: #22162b;
-    --panel: rgba(255, 255, 255, 0.08);
-    --panel2: rgba(255, 255, 255, 0.10);
-    --text: rgba(255, 255, 255, 0.92);
-    --muted: rgba(255, 255, 255, 0.65);
+  --bg-color: #241b2f; /* Dark Purple */
+  --card-bg: rgba(255, 255, 255, 0.1);
+  --text-color: #ffffff;
+  --accent-color: #a06cd5;
 }
 
-* { box-sizing: border-box; }
-html, body {
-    height: 100%;
-    margin: 0;
-    font-family: system-ui, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  overflow: hidden; 
 }
 
-.hidden { display: none; }
-
-/* Home */
-.home {
-    height: 100%;
-    display: grid;
-    place-items: center;
-    padding: 24px;
+/* DASHBOARD LAYOUT */
+.dashboard {
+  display: grid;
+  grid-template-columns: 350px 1fr 300px;
+  grid-template-rows: 100%;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  gap: 20px;
 }
 
-.center { width: min(900px, 92vw); }
-
-.searchRow {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--panel);
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 14px;
-    padding: 14px 16px;
-    width: min(520px, 92vw);
-    margin: 0 auto;
+/* CARDS COMMON */
+.card, .widget {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
 }
 
-.g {
-    font-weight: 700;
-    font-size: 18px;
-    opacity: 0.9;
+/* LEFT PANEL (Exercise) */
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
 }
-
-#searchInput {
-    flex: 1;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: var(--text);
-    font-size: 16px;
+.exerciseCard {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  justify-content: space-between;
 }
-
-#searchInput::placeholder { color: var(--muted); }
-
-.dots {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 18px 0 22px;
+.exerciseCard h3 { margin-top: 0; }
+#selfieVideo {
+  width: 100%;
+  height: 300px;
+  background: black;
+  border-radius: 8px;
+  object-fit: cover;
+  transform: scaleX(-1); /* Mirror effect */
+  margin: 10px 0;
 }
-
-.dots span {
-    width: 18px;
-    height: 18px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.85);
-    opacity: 0.85;
+.exerciseOverlay {
+  margin-top: 10px;
+  font-size: 14px;
 }
-
-/* Apps header + add */
-.appsHeader{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    width:min(820px,92vw);
-    margin: 8px auto 12px;
-}
-.appsTitle{ font-weight:700; opacity:.9; }
-.addAppBtn{
-    background: rgba(255,255,255,0.10);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.95);
-    border-radius: 10px;
-    padding: 8px 12px;
-    cursor:pointer;
-}
-.addAppBtn:hover{
-    background: rgba(255,255,255,0.14);
-}
-
-/* Apps grid */
-.appsGrid{
-    width:min(820px,92vw);
-    margin: 0 auto;
-    display:grid;
-    grid-template-columns: repeat(5, minmax(120px,1fr));
-    gap: 14px;
-}
-
-.appCard{
-    background: rgba(0,0,0,0.18);
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 14px;
-    padding: 14px 10px;
-    cursor:pointer;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-    user-select: none;
-}
-.appCard:hover{ background: rgba(0,0,0,0.24); }
-
-.appIcon{
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.12);
-    display:grid;
-    place-items:center;
-    font-weight:800;
-}
-
-.appName{
-    font-size: 13px;
-    opacity: .92;
-    text-align:center;
-}
-
-.hint{
-    width:min(820px,92vw);
-    margin: 14px auto 0;
-    text-align:center;
-    font-size: 12px;
-    opacity: 0.7;
-}
-
-/* Web */
-.webWrap { height: 100%; display: flex; flex-direction: column; }
-
-.topBar {
-    display: flex;
-    gap: 8px;
+.detectionBox {
+    margin-top: 10px;
     padding: 10px;
-    background: rgba(0,0,0,0.35);
-    border-bottom: 1px solid rgba(255,255,255,0.10);
-    align-items: center;
+    background: rgba(0, 255, 0, 0.1);
+    color: #0f0;
+    border: 1px solid #0f0;
+    text-align: center;
+    border-radius: 4px;
+    display: none; /* Shown by JS */
 }
 
-.topBar button {
-    background: var(--panel2);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: var(--text);
-    border-radius: 10px;
-    padding: 8px 10px;
-    cursor: pointer;
+/* CENTER PANEL (Search & grid) */
+.centerPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+.searchContainer {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.08); /* Slightly lighter */
+  padding: 10px 20px;
+  border-radius: 30px;
+}
+.g-logo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 15px;
+}
+#searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+.searchIcons span {
+  margin-left: 10px;
+  cursor: pointer;
 }
 
-.topBar button:hover{
-    background: rgba(255,255,255,0.14);
+.quickApps {
+  display: flex;
+  gap: 15px;
+}
+.appCircle {
+  width: 50px;
+  height: 50px;
+  background: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: 0.2s;
+}
+.appCircle:hover { opacity: 1; transform: scale(1.1); }
+
+.widgetsRow {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  justify-content: center;
+}
+.widget {
+  width: 180px;
+  height: 170px;
+  font-size: 14px;
+  justify-content: space-between;
+}
+.widgetHeader {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #ddd;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 5px;
 }
 
-#urlBar {
-    flex: 1;
-    background: var(--panel);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: var(--text);
-    border-radius: 10px;
-    padding: 10px 12px;
-    outline: none;
+/* RIGHT PANEL (Music & Auth) */
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: stretch; 
+}
+.musicCard {
+  background: rgba(160, 108, 213, 0.3);
+  height: 120px;
+  justify-content: center;
+}
+.musicHeader { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.musicControls { display: flex; justify-content: space-around; }
+.musicControls button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 24px;
 }
 
-.webview { flex: 1; width: 100%; }
-
-/* Tabs (BOTTOM) */
-.tabBar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px;
-    background: rgba(0,0,0,0.55);
-    border-top: 1px solid rgba(255,255,255,0.12);
+.faceCard {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.facesilhouette {
+  font-size: 80px;
+  margin-top: 20px;
+  opacity: 0.5;
+  animation: pulse 2s infinite;
 }
 
-#tabs {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    flex: 1;
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.05); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 0.5; }
 }
 
-.tab {
-    background: rgba(255,255,255,0.10);
-    border: 1px solid rgba(255,255,255,0.14);
-    border-radius: 10px;
-    padding: 6px 10px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    white-space: nowrap;
+.settingsIcon {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
 }
 
-.tab.active {
-    background: rgba(255,255,255,0.22);
+/* WEBVIEW OVERLAY */
+.hidden { display: none !important; }
+.webWrap {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 100;
 }
-
-.tab .close {
-    font-size: 12px;
-    opacity: 0.8;
-    cursor: pointer;
+.topBar {
+  padding: 8px;
+  background: #eee;
+  display: flex;
+  gap: 10px;
 }
-
-.newTabBtn {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: white;
-    border-radius: 10px;
-    padding: 6px 10px;
-    cursor: pointer;
+#webview {
+  flex: 1;
+  width: 100%;
+  height: 100%;
 }
-
