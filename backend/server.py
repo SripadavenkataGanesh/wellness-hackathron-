@@ -34,6 +34,7 @@ class ResolveRequest(BaseModel):
 class ImageRequest(BaseModel):
     image: str
 
+
 # --- Mock Data ---
 WEATHER_DATA = {
     "temp": "19°C",
@@ -54,6 +55,7 @@ NEWS_DATA = [
      {"title": "Tech giants announce new AI pact", "source": "TechCrunch"},
      {"title": "Global wellness trends for 2025", "source": "BBC Health"},
 ]
+
 
 # --- YOLOv8 Setup ---
 from ultralytics import YOLO
@@ -105,6 +107,7 @@ def get_news():
 @app.get("/api/apps")
 def get_apps():
     return DEFAULT_APPS
+
 
 @app.post("/api/resolve")
 def resolve_url(req: ResolveRequest):

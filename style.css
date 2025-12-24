@@ -26,7 +26,7 @@ html {
   grid-template-rows: 100%;
   height: 100vh;
   padding: 20px;
-  padding-bottom: 120px;
+  padding-bottom: 20px;
   box-sizing: border-box;
   gap: 20px;
   position: relative;
@@ -407,151 +407,7 @@ html {
   z-index: 10;
 }
 
-/* BOOKMARK BAR - BOTTOM POSITIONED (above search bar) */
-.bookmarkBar {
-  position: fixed;
-  bottom: 50px;
-  left: 0;
-  right: 0;
-  background: rgba(30, 30, 40, 0.98);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 100;
-  padding: 8px 15px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 50px;
-  box-sizing: border-box;
-  gap: 10px;
-}
 
-.bookmarkRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.bookmarkSearchRow {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(30, 30, 40, 0.98);
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  padding: 8px 15px;
-  gap: 10px;
-  height: 50px;
-  box-sizing: border-box;
-}
-
-.bookmark {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-  font-size: 12px;
-  height: 32px;
-}
-
-.bookmark:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.bookmarkIcon {
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-}
-
-.bookmarkLabel {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 11px;
-  max-width: 100px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.bookmarkMore {
-  padding: 4px 10px;
-  cursor: pointer;
-  font-size: 18px;
-  transition: 0.2s;
-  border-radius: 4px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-}
-
-.bookmarkMore:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.bookmarkTopRight {
-  display: none;
-}
-
-.bookmarkUrlInput {
-  display: none;
-}
-
-.navBtn {
-  cursor: pointer;
-  font-size: 16px;
-  padding: 6px 10px;
-  border-radius: 4px;
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  height: 32px;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.navBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.bookmarkSearchInput {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 12px;
-  outline: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  text-align: left;
-}
-
-.bookmarkSearchInput::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.bookmarkIconBtn {
-  cursor: pointer;
-  font-size: 15px;
-  transition: 0.2s;
-  padding: 4px 6px;
-  border-radius: 4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bookmarkIconBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
 
 /* WEBVIEW OVERLAY */
 .hidden {
@@ -818,35 +674,6 @@ html {
     right: 15px;
   }
 
-  /* Bookmark bar responsive */
-  .bookmarkBar {
-    height: 45px;
-    padding: 0 10px;
-    gap: 3px;
-  }
-
-  .bookmark {
-    padding: 4px 8px;
-    font-size: 11px;
-  }
-
-  .bookmarkLabel {
-    max-width: 80px;
-    font-size: 11px;
-  }
-
-  .bookmarkSearch {
-    max-width: 250px;
-  }
-
-  .bookmarkSearchInput {
-    width: 120px;
-    font-size: 11px;
-  }
-
-  .bookmarkIconBtn {
-    font-size: 14px;
-  }
 }
 
 /* Mobile - Small (max-width: 320px) */

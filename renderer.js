@@ -63,20 +63,13 @@ async function navigate(query) {
             if (query.includes(".") && !query.includes(" ")) url = "https://" + query;
         }
 
-        // Open in new tab to avoid 'Refused to connect' errors in iframe
-        logStatus("Opening in new tab: " + url);
-        window.open(url, '_blank');
-        return; // Stop processing for iframe fallback
-
-        /* 
-        // Iframe Logic (Disabled due to security blocks)
+        // Internal navigation (stay in app)
         dashboard.classList.add("hidden");
         webWrap.classList.remove("hidden");
-        
+
         logStatus("Loading URL in Webview: " + url);
-        webview.src = url; 
+        webview.src = url;
         urlBar.value = url;
-        */
 
     } catch (err) {
         logStatus("Error in navigate: " + err);
@@ -120,6 +113,7 @@ urlBar.onkeydown = (e) => {
 }
 
 // ------------------- Backend Data -------------------
+
 async function fetchData() {
     try {
         // Weather
@@ -159,10 +153,13 @@ async function fetchData() {
             <div style="color:#0f0">NVDA: $1483.50 (+2.5%)</div>
         `;
 
+
     } catch (e) {
         console.error("Backend error", e);
     }
 }
+
+// No interval for Apps/News to save bandwidth, only on load or reload
 
 // ------------------- Spotify Hub Logic -------------------
 const spotifySearchInput = document.getElementById("spotifySearchInput");
@@ -283,26 +280,17 @@ async function processFrame() {
     }
 }
 
-startCamera();
-
-// ------------------- Bookmark Bar -------------------
-// Bookmark clicks
-document.querySelectorAll('.bookmark').forEach(bookmark => {
-    bookmark.addEventListener('click', () => {
-        const url = bookmark.getAttribute('data-url');
-        if (url) {
-            navigate(url);
-        }
-    });
-});
-
-// Bookmark search
-const bookmarkSearchInput = document.querySelector('.bookmarkSearchInput');
-if (bookmarkSearchInput) {
-    bookmarkSearchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            navigate(bookmarkSearchInput.value);
-        }
-    });
+// ------------------- Camera & CV -------------------
+async function startCamera() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        videoEl.srcObject = stream;
+        setInterval(processFrame, 2000);
+    } catch (err) {
+        console.error("Error accessing camera", err);
+        authStatus.innerText = "Camera Error";
+    }
 }
+
+startCamera();
 

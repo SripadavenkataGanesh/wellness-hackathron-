@@ -14,37 +14,7 @@
     <!-- DASHBOARD -->
     <div id="dashboard" class="dashboard">
 
-        <!-- BOOKMARK BAR - TOP -->
-        <div class="bookmarkBar">
-            <!-- Top row: Bookmarks -->
-            <div class="bookmarkRow">
-                <div class="bookmark" data-url="https://youtube.com">
-                    <span class="bookmarkIcon">▶️</span>
-                    <span class="bookmarkLabel">(12) YouTube</span>
-                </div>
-                <div class="bookmark" data-url="https://spaces.google.com">
-                    <span class="bookmarkIcon">💬</span>
-                    <span class="bookmarkLabel">Spaces - Hugging F...</span>
-                </div>
-                <div class="bookmark" data-url="https://notebooklm.google.com">
-                    <span class="bookmarkIcon">📝</span>
-                    <span class="bookmarkLabel">NotebookLM</span>
-                </div>
-                <div class="bookmark" data-url="https://learn.example.com">
-                    <span class="bookmarkIcon">📚</span>
-                    <span class="bookmarkLabel">Learn courses</span>
-                </div>
-            </div>
-        </div>
 
-        <!-- SEARCH BAR - BOTTOM -->
-        <div class="bookmarkSearchRow">
-            <span class="navBtn">←</span>
-            <span class="navBtn">→</span>
-            <span class="navBtn">⟳</span>
-            <span class="navBtn">🔍</span>
-            <input type="text" placeholder="Enter search or web address" class="bookmarkSearchInput" />
-        </div>
 
         <!-- LEFT PANEL: Spotify & Face Recognition -->
         <div class="leftPanel">
@@ -152,52 +122,21 @@
             </div>
         </div>
 
-        <!-- BOOKMARK BAR -->
-        <div class="bookmarkBar">
-            <div class="bookmark" data-url="https://youtube.com">
-                <span class="bookmarkIcon">▶️</span>
-                <span class="bookmarkLabel">(12) YouTube</span>
-            </div>
-            <div class="bookmark" data-url="https://spaces.google.com">
-                <span class="bookmarkIcon">💬</span>
-                <span class="bookmarkLabel">Spaces - Hugging F...</span>
-            </div>
-            <div class="bookmark" data-url="https://notebooklm.google.com">
-                <span class="bookmarkIcon">📝</span>
-                <span class="bookmarkLabel">NotebookLM</span>
-            </div>
-            <div class="bookmark" data-url="https://learn.example.com">
-                <span class="bookmarkIcon">📚</span>
-                <span class="bookmarkLabel">Learn courses</span>
-            </div>
-            <div class="bookmarkMore">
-                <span>⋯</span>
-            </div>
-            <div class="bookmarkSearch">
-                <input type="text" placeholder="Enter search or web address" class="bookmarkSearchInput" />
-                <div class="bookmarkIcons">
-                    <span class="bookmarkIconBtn">👤</span>
-                    <span class="bookmarkIconBtn">⬇️</span>
-                    <span class="bookmarkIconBtn">☰</span>
-                    <span class="bookmarkIconBtn">⚙️</span>
-                </div>
-            </div>
-        </div>
+
 
     </div>
 
     <!-- WEBVIEW WRAPPER (Hidden by default) -->
     <div id="webWrap" class="webWrap hidden">
-        <div class="topBar">
-            <button id="backBtn">◀</button>
-            <button id="forwardBtn">▶</button>
-            <button id="reloadBtn">⟳</button>
+        <div class="urlBarArea">
+            <button id="backBtn">←</button>
+            <button id="forwardBtn">→</button>
+            <button id="reloadBtn">↻</button>
             <input id="urlBar" type="text" />
             <button id="homeBtn">⌂</button>
         </div>
         <iframe id="webview" class="webview" src="about:blank"></iframe>
     </div>
-
     <script src="renderer.js"></script>
 </body>
 
