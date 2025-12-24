@@ -7,6 +7,6 @@
     "start": "electron-nightly ."
   },
   "devDependencies": {
-    "electron-nightly": "latest"
+    "electron-nightly": "^41.0.0-nightly.20251219"
   }
 }

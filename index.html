@@ -48,16 +48,23 @@
 
         <!-- LEFT PANEL: Spotify & Face Recognition -->
         <div class="leftPanel">
-            <div class="card musicCard">
+            <div class="card spotifyHub">
                 <div class="musicHeader">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"
                         alt="Spotify" width="20">
-                    <span>Spotify</span>
+                    <span>Spotify Hub</span>
                 </div>
-                <div class="musicControls">
-                    <button>⏮</button>
-                    <button>▶</button>
-                    <button>⏭</button>
+                <div class="spotifySearchBox">
+                    <input type="text" id="spotifySearchInput" placeholder="Search track/artist..." />
+                    <button id="spotifySearchBtn">🔍</button>
+                </div>
+                <div id="spotifyResults" class="spotifyResults hidden"></div>
+                <div class="spotifyPlayerContainer">
+                    <iframe id="spotifyPlayer"
+                        src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM3M?utm_source=generator&theme=0"
+                        width="100%" height="80" frameBorder="0" allowfullscreen=""
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy"></iframe>
                 </div>
             </div>
 
@@ -127,10 +134,7 @@
                     <div class="widgetHeader">Top Stories</div>
                     <div id="newsData">Loading...</div>
                 </div>
-                <div class="widget spotifyWidget">
-                    <div class="widgetHeader">Spotify</div>
-                    <div class="widgetContent">Now Playing</div>
-                </div>
+
             </div>
         </div>
 

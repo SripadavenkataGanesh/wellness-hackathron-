@@ -9,6 +9,12 @@ from fastapi import FastAPI, UploadFile, File, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
+import os
+from dotenv import load_dotenv
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -58,13 +64,29 @@ squat_count = 0
 current_stage = None
 
 # --- MediaPipe Setup ---
-mp_face_mesh = mp.solutions.face_mesh
-face_mesh = mp_face_mesh.FaceMesh(
-    max_num_faces=1,
-    refine_landmarks=True,
-    min_detection_confidence=0.5,
-    min_tracking_confidence=0.5
-)
+# Using MediaPipe Tasks API for face detection
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
+
+# For face detection, we'll use a simpler approach with OpenCV's Haar Cascade
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+# --- Spotify Setup ---
+SPOTIPY_CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
+SPOTIPY_CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
+
+sp = None
+if SPOTIPY_CLIENT_ID and SPOTIPY_CLIENT_SECRET:
+    try:
+        sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
+            client_id=SPOTIPY_CLIENT_ID,
+            client_secret=SPOTIPY_CLIENT_SECRET
+        ))
+        print("Spotify Integration: Active")
+    except Exception as e:
+        print(f"Spotify Init Error: {e}")
+else:
+    print("Spotify Integration: Missing Credentials (using mock/public fallback)")
 
 # --- Endpoints ---
 
@@ -123,15 +145,16 @@ def face_auth(req: ImageRequest = Body(...)):
         nparr = np.frombuffer(base64.b64decode(encoded), np.uint8)
         frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         
-        # Convert to RGB for MediaPipe
-        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # Convert to grayscale for face detection
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
-        results = face_mesh.process(rgb_frame)
+        # Detect faces
+        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
         
         authorized = False
         message = "Scanning..."
         
-        if results.multi_face_landmarks:
+        if len(faces) > 0:
             authorized = True
             message = "Authorized: User"
             
@@ -186,6 +209,43 @@ def log_history(req: ResolveRequest):
     # Retrieve title/url from body if needed, currently just logging
     print(f"Visited: {req.query}")
     return {"status": "logged"}
+
+@app.get("/api/spotify/search")
+def search_spotify(q: str):
+    if not q:
+        return {"tracks": []}
+    
+    if sp:
+        try:
+            results = sp.search(q=q, limit=5, type='track')
+            tracks = []
+            for item in results['tracks']['items']:
+                tracks.append({
+                    "id": item['id'],
+                    "name": item['name'],
+                    "artist": item['artists'][0]['name'],
+                    "album": item['album']['name'],
+                    "image": item['album']['images'][0]['url'] if item['album']['images'] else None,
+                    "uri": item['uri']
+                })
+            return {"tracks": tracks}
+        except Exception as e:
+            return {"error": str(e), "tracks": []}
+    else:
+        # Mock results if no credentials provided
+        return {
+            "tracks": [
+                {
+                    "id": "4cOdK2wGqyR7yv9P9nc0Yq", # "Never Gonna Give You Up" - Valid ID for embed
+                    "name": f"Search Result: {q}",
+                    "artist": "Rick Astley",
+                    "album": "Whenever You Need Somebody",
+                    "image": "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg",
+                    "uri": "spotify:track:4cOdK2wGqyR7yv9P9nc0Yq"
+                }
+            ],
+            "note": "Missing Spotify Credentials. Using mock fallback. Add SPOTIPY_CLIENT_ID to .env"
+        }
 
 if __name__ == '__main__':
     # Run with uvicorn

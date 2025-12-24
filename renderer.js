@@ -164,6 +164,74 @@ async function fetchData() {
     }
 }
 
+// ------------------- Spotify Hub Logic -------------------
+const spotifySearchInput = document.getElementById("spotifySearchInput");
+const spotifySearchBtn = document.getElementById("spotifySearchBtn");
+const spotifyResults = document.getElementById("spotifyResults");
+const spotifyPlayer = document.getElementById("spotifyPlayer");
+
+async function performSpotifySearch() {
+    const query = spotifySearchInput.value.trim();
+    if (!query) return;
+
+    // Loading State
+    const originalBtn = spotifySearchBtn.innerHTML;
+    spotifySearchBtn.innerHTML = "⏳";
+    spotifySearchBtn.disabled = true;
+
+    try {
+        const res = await fetch(`${BACKEND_URL}/spotify/search?q=${encodeURIComponent(query)}`);
+        const data = await res.json();
+
+        if (data.tracks && data.tracks.length > 0) {
+            spotifyResults.innerHTML = "";
+            spotifyResults.classList.remove("hidden");
+
+            data.tracks.forEach(track => {
+                const div = document.createElement("div");
+                div.className = "spotifyResultItem";
+                div.innerHTML = `
+                    <img src="${track.image || 'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg'}" width="30" height="30">
+                    <div class="trackInfo">
+                        <div class="trackName">${track.name}</div>
+                        <div class="trackArtist">${track.artist}</div>
+                    </div>
+                `;
+                div.onclick = () => {
+                    const embedUrl = `https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`;
+                    spotifyPlayer.src = embedUrl;
+                    spotifyResults.classList.add("hidden");
+                    spotifySearchInput.value = "";
+                };
+                spotifyResults.appendChild(div);
+            });
+        } else if (data.note) {
+            logStatus("Spotify: Using mock results (check console)");
+            console.warn(data.note);
+            // Even in mock mode, clicking often works if a real URI was provided in the mock
+        }
+    } catch (err) {
+        console.error("Spotify Search Error:", err);
+    } finally {
+        spotifySearchBtn.innerHTML = originalBtn;
+        spotifySearchBtn.disabled = false;
+    }
+}
+
+if (spotifySearchBtn) {
+    spotifySearchBtn.onclick = performSpotifySearch;
+    spotifySearchInput.onkeydown = (e) => {
+        if (e.key === "Enter") performSpotifySearch();
+    };
+
+    // Close results on click outside
+    document.addEventListener("click", (e) => {
+        if (!spotifyResults.contains(e.target) && e.target !== spotifySearchInput) {
+            spotifyResults.classList.add("hidden");
+        }
+    });
+}
+
 fetchData();
 // No interval for Apps/News to save bandwidth, only on load or reload
 
