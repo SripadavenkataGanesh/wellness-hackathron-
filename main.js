@@ -26,10 +26,10 @@ function createWindow() {
         height: 900,
         backgroundColor: "#241b2f",
         webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true,
-            webviewTag: true,
-            preload: path.join(__dirname, "preload.js"),
+            preload: path.join(__dirname, 'preload.js'),
+            nodeIntegration: true,
+            contextIsolation: false,
+            webviewTag: true // Enabled for internal browsing
         },
     });
 

@@ -128,14 +128,50 @@
 
     <!-- WEBVIEW WRAPPER (Hidden by default) -->
     <div id="webWrap" class="webWrap hidden">
-        <div class="urlBarArea">
-            <button id="backBtn">←</button>
-            <button id="forwardBtn">→</button>
-            <button id="reloadBtn">↻</button>
-            <input id="urlBar" type="text" />
-            <button id="homeBtn">⌂</button>
+        <webview id="webview" class="webview" src="about:blank" allowpopups></webview>
+    </div>
+
+    <!-- GLOBAL BOTTOM BROWSER BAR -->
+    <div id="bottomBrowserBar" class="bottomBrowserBar">
+        <!-- Bookmark Bar -->
+        <div id="bookmarkBar" class="bookmarkBar">
+            <div class="bookmarkItem" onclick="navigate('https://www.youtube.com')">
+                <img src="https://www.google.com/s2/favicons?sz=64&domain=youtube.com" alt="YouTube">
+                <span>(12) YouTube</span>
+            </div>
+            <div class="bookmarkItem" onclick="navigate('https://huggingface.co/spaces')">
+                <img src="https://www.google.com/s2/favicons?sz=64&domain=huggingface.co" alt="Spaces">
+                <span>Spaces - Hugging F...</span>
+            </div>
+            <div class="bookmarkItem" onclick="navigate('https://notebooklm.google.com')">
+                <img src="https://www.google.com/s2/favicons?sz=64&domain=google.com" alt="NotebookLM">
+                <span>NotebookLM</span>
+            </div>
+            <div class="bookmarkItem">
+                <span class="folderIcon">📁</span>
+                <span>Learn cources</span>
+            </div>
         </div>
-        <iframe id="webview" class="webview" src="about:blank"></iframe>
+
+        <!-- Navigation Bar -->
+        <div id="navigationBar" class="navigationBar">
+            <div class="navControls">
+                <button id="backBtn" title="Back">‹</button>
+                <button id="forwardBtn" title="Forward">›</button>
+                <button id="reloadBtn" title="Reload">↻</button>
+            </div>
+            <div class="urlInputWrapper">
+                <span class="searchIcon">🔍</span>
+                <input id="urlBar" type="text" placeholder="Enter search or web address" />
+            </div>
+            <div class="extraTools">
+                <button id="cameraBtn" title="Camera">📷</button>
+                <button id="downloadBtn" title="Downloads">📥</button>
+                <button id="layersBtn" title="Extensions">🧱</button>
+                <button id="menuBtn" title="Menu">≡</button>
+                <button id="homeBtn" title="Home">⚙️</button>
+            </div>
+        </div>
     </div>
     <script src="renderer.js"></script>
 </body>

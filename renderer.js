@@ -1,4 +1,3 @@
-// Elements
 const dashboard = document.getElementById("dashboard");
 const webWrap = document.getElementById("webWrap");
 const searchInput = document.getElementById("searchInput");
@@ -40,10 +39,11 @@ function logStatus(msg) {
 
 // ------------------- Navigation -------------------
 async function navigate(query) {
+    if (!query) return;
     logStatus("Navigating to: " + query);
     try {
         let url = query;
-        // Try backend
+        // Try backend for resolution
         try {
             const res = await fetch(`${BACKEND_URL}/resolve`, {
                 method: "POST",
@@ -54,20 +54,20 @@ async function navigate(query) {
                 const data = await res.json();
                 url = data.url;
                 logStatus("Resolved URL: " + url);
-            } else {
-                throw new Error("Backend non-200");
             }
         } catch (e) {
             logStatus("Backend failed, using fallback");
-            url = "https://www.google.com/search?q=" + encodeURIComponent(query);
-            if (query.includes(".") && !query.includes(" ")) url = "https://" + query;
+            if (query.includes(".") && !query.includes(" ")) {
+                url = query.startsWith("http") ? query : "https://" + query;
+            } else {
+                url = "https://www.google.com/search?q=" + encodeURIComponent(query);
+            }
         }
 
-        // Internal navigation (stay in app)
         dashboard.classList.add("hidden");
         webWrap.classList.remove("hidden");
 
-        logStatus("Loading URL in Webview: " + url);
+        logStatus("Loading in Webview: " + url);
         webview.src = url;
         urlBar.value = url;
 
@@ -76,27 +76,39 @@ async function navigate(query) {
     }
 }
 
+// Webview Events
+webview.addEventListener('did-start-loading', () => {
+    logStatus("Loading...");
+});
+webview.addEventListener('did-stop-loading', () => {
+    logStatus("Ready");
+    urlBar.value = webview.getURL();
+});
+webview.addEventListener('did-navigate', (event) => {
+    urlBar.value = event.url;
+});
+webview.addEventListener('did-navigate-in-page', (event) => {
+    urlBar.value = event.url;
+});
+
 function showHome() {
     webWrap.classList.add("hidden");
     dashboard.classList.remove("hidden");
 }
 
-document.getElementById("homeBtn").onclick = showHome;
-const navigateFallback = (url) => {
-    // Try to open in iframe, if blocked user can open externally
-    webview.src = url;
-    urlBar.value = url;
-};
+// Navigation Handlers
+document.getElementById("backBtn").onclick = () => { if (webview.canGoBack()) webview.goBack(); };
+document.getElementById("forwardBtn").onclick = () => { if (webview.canGoForward()) webview.goForward(); };
+document.getElementById("reloadBtn").onclick = () => { webview.reload(); };
 
-// Simple navigation handlers for iframe history
-document.getElementById("backBtn").onclick = () => { try { webview.contentWindow.history.back(); } catch (e) { } };
-document.getElementById("forwardBtn").onclick = () => { try { webview.contentWindow.history.forward(); } catch (e) { } };
-document.getElementById("reloadBtn").onclick = () => { try { webview.contentWindow.location.reload(); } catch (e) { } };
+// Home/Settings Button
 document.getElementById("homeBtn").onclick = showHome;
 
-// Add Open External Button logic (if you had a button, or just use console/alert for now in web app mode)
-// For web app mode, we can add a small button next to URL bar dynamically if needed, 
-// but for now let's just use the iframe.
+// Extra Buttons (Placeholders)
+document.getElementById("cameraBtn").onclick = () => alert("Camera clicked");
+document.getElementById("downloadBtn").onclick = () => alert("Downloads clicked");
+document.getElementById("layersBtn").onclick = () => alert("Extensions clicked");
+document.getElementById("menuBtn").onclick = () => alert("Menu clicked");
 
 // Main Search Input
 searchInput.onkeydown = (e) => {

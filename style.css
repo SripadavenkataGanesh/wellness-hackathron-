@@ -702,3 +702,155 @@ html {
     font-size: 35px;
   }
 }
+
+/* GLOBAL BOTTOM BROWSER BAR */
+.bottomBrowserBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(45, 30, 60, 0.6);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0;
+}
+
+/* Bookmark Bar */
+.bookmarkBar {
+  display: flex;
+  gap: 15px;
+  padding: 5px 20px;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bookmarkBar::-webkit-scrollbar {
+  display: none;
+}
+
+.bookmarkItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.bookmarkItem:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.bookmarkItem img {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+}
+
+.folderIcon {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* Navigation Bar */
+.navigationBar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 8px 20px;
+}
+
+.navControls {
+  display: flex;
+  gap: 5px;
+}
+
+.navControls button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.navControls button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.urlInputWrapper {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  height: 36px;
+}
+
+.searchIcon {
+  font-size: 14px;
+  margin-right: 10px;
+  opacity: 0.5;
+}
+
+#urlBar {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+.extraTools {
+  display: flex;
+  gap: 10px;
+}
+
+.extraTools button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.extraTools button:hover {
+  opacity: 1;
+}
+
+/* Adjust Dashboard and Webview for bottom bar */
+.dashboard {
+  padding-bottom: 100px;
+  /* Space for the bottom bar */
+}
+
+.webWrap {
+  height: calc(100vh - 85px);
+  /* Adjusted to leave room for bottom bar */
+}
+
+#webview {
+  border: none;
+}
+
+/* Hide original top bar elements if any remained */
+.urlBarArea {
+  display: none !important;
+}
