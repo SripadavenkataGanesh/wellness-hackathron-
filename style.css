@@ -1,8 +1,7 @@
 /* WELLNESS BROWSER THEME */
 :root {
   --bg-color: #241b2f;
-  /* Dark Purple */
-  --card-bg: rgba(255, 255, 255, 0.1);
+  --card-bg: rgba(255, 255, 255, 0.05);
   --text-color: #ffffff;
   --accent-color: #a06cd5;
 }
@@ -19,72 +18,168 @@ html {
   overflow: hidden;
 }
 
+/* BACKGROUND STYLES */
+.browserBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  transition: background-image 0.5s ease-in-out;
+}
+
+.backgroundOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 2;
+}
+
+/* WEBVIEW WRAPPER */
+.webWrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 65px);
+  /* Ultra-slim height */
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  z-index: 100;
+}
+
+.webview {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 /* DASHBOARD LAYOUT */
 .dashboard {
+  position: relative;
+  z-index: 10;
   display: grid;
   grid-template-columns: 250px 1fr 350px;
   grid-template-rows: 100%;
   height: 100vh;
-  padding: 20px;
-  padding-bottom: 20px;
+  padding: 15px;
+  padding-bottom: 75px;
+  /* Ultra-slim adjustment */
   box-sizing: border-box;
-  gap: 20px;
-  position: relative;
+  gap: 15px;
 }
 
-/* Desktop Label */
-.desktopLabel {
-  position: absolute;
-  top: 30px;
-  left: 30px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
-  z-index: 10;
+.hidden {
+  display: none !important;
 }
 
 /* CARDS COMMON */
 .card,
 .widget {
-  background: var(--card-bg);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
   padding: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
 }
 
-/* LEFT PANEL (Spotify & Face) */
+/* LEFT PANEL */
 .leftPanel {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: 100%;
-  position: relative;
 }
 
-.playButton {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
+/* SPOTIFY HUB BEAUTIFICATION */
+.spotifyHub {
+  padding: 20px !important;
+  background: rgba(24, 24, 24, 0.7) !important;
+  border: 1px solid rgba(30, 215, 96, 0.3) !important;
+}
+
+.musicHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #1DB954;
+}
+
+.spotifySearchBox {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+#spotifySearchInput {
+  flex: 1;
   background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: white;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+#spotifySearchInput:focus {
+  border-color: #1DB954;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+#spotifySearchBtn {
+  background: #1DB954;
+  border: none;
+  border-radius: 8px;
+  width: 35px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: transform 0.2s;
 }
 
-.playButton:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
+#spotifySearchBtn:hover {
+  transform: scale(1.05);
 }
 
-/* CENTER PANEL (Search & grid) */
+.spotifyResults {
+  position: absolute;
+  top: 110px;
+  left: 20px;
+  right: 20px;
+  background: #282828;
+  border-radius: 12px;
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid #404040;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+.spotifyPlayerContainer {
+  margin-top: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+/* CENTER PANEL */
 .centerPanel {
   display: flex;
   flex-direction: column;
@@ -97,16 +192,17 @@ html {
   width: 80%;
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  /* Slightly lighter */
-  padding: 10px 20px;
-  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px 25px;
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .g-logo {
   font-size: 24px;
   font-weight: bold;
   margin-right: 15px;
+  color: var(--accent-color);
 }
 
 #searchInput {
@@ -118,589 +214,70 @@ html {
   outline: none;
 }
 
-.searchIcons {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.searchIcons svg {
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.searchIcons svg:hover {
-  transform: scale(1.1);
-}
-
 .quickApps {
   display: flex;
   gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .appCircle {
-  width: 50px;
-  height: 50px;
-  background: #ccc;
+  width: 45px;
+  height: 45px;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   cursor: pointer;
-  opacity: 0.8;
-  transition: 0.2s;
+  transition: transform 0.2s, background 0.2s;
 }
 
 .appCircle:hover {
-  opacity: 1;
   transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .widgetsRow {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   width: 100%;
   justify-content: center;
-  max-width: 900px;
 }
 
 .widget {
-  width: 200px;
-  height: 170px;
-  font-size: 14px;
-  justify-content: space-between;
+  width: 180px;
+  height: 150px;
 }
 
 .widgetHeader {
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #ddd;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  padding-bottom: 5px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  opacity: 0.7;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-/* RIGHT PANEL (Exercise & Movement) */
+/* RIGHT PANEL */
 .rightPanel {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  align-items: stretch;
-  position: relative;
 }
 
 .exerciseCard {
-  position: relative;
-  overflow: hidden;
-  justify-content: space-between;
-  max-height: 400px;
-  flex-shrink: 0;
   text-align: center;
   align-items: center;
-  border-radius: 50%;
-  aspect-ratio: 1 / 1;
-  width: 100%;
-}
-
-.exerciseCard h3 {
-  margin-top: 0;
-  margin-bottom: 5px;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-}
-
-#exerciseStatus {
-  font-size: 12px;
-  margin-bottom: 3px;
-  text-align: center;
-}
-
-#exerciseCount {
-  font-size: 12px;
-  margin-bottom: 5px;
-  text-align: center;
 }
 
 #selfieVideo {
-  width: 200px;
-  height: 200px;
-  background: black;
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 1/1;
+  background: #000;
   border-radius: 50%;
   object-fit: cover;
   transform: scaleX(-1);
-  /* Mirror effect */
-  margin: 5px auto;
-  display: block;
-}
-
-.exerciseOverlay {
-  margin-top: -10px;
-  font-size: 10px;
-  text-align: center;
-}
-
-.exerciseOverlay p {
-  margin: 3px 0;
-  text-align: center;
-}
-
-.detectionBox {
-  margin-top: 10px;
-  padding: 10px;
-  background: rgba(0, 255, 0, 0.1);
-  color: #0f0;
-  border: 1px solid #0f0;
-  text-align: center;
-  border-radius: 4px;
-  display: none;
-  /* Shown by JS */
-}
-
-/* Spotify Hub Styles */
-.spotifyHub {
-  background: rgba(30, 215, 96, 0.1);
-  /* Spotify Green subtle tint */
-  border: 1px solid rgba(30, 215, 96, 0.2);
-  min-height: 220px;
-}
-
-.spotifySearchBox {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 10px;
-}
-
-.spotifySearchBox input {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  color: white;
-  padding: 5px 10px;
-  font-size: 12px;
-  outline: none;
-}
-
-.spotifySearchBox button {
-  background: #1DB954;
-  border: none;
-  border-radius: 4px;
-  color: white;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.spotifyResults {
-  position: absolute;
-  top: 85px;
-  left: 15px;
-  right: 15px;
-  background: #282828;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  max-height: 200px;
-  overflow-y: auto;
-  border: 1px solid #404040;
-}
-
-.spotifyResultItem {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.spotifyResultItem:last-child {
-  border-bottom: none;
-}
-
-.spotifyResultItem:hover {
-  background: rgba(30, 215, 96, 0.25);
-}
-
-.spotifyResultItem img {
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.trackInfo {
-  flex: 1;
-  overflow: hidden;
-}
-
-.trackName {
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.trackArtist {
-  font-size: 10px;
-  color: #b3b3b3;
-}
-
-.spotifyPlayerContainer {
-  margin-top: auto;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #000;
-}
-
-.faceCard {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  max-height: 180px;
-  padding: 15px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  aspect-ratio: 1 / 1;
-}
-
-.facesilhouette {
-  font-size: 50px;
-  margin-top: 10px;
-  opacity: 0.5;
-  animation: pulse 2s infinite;
-}
-
-.faceHeader {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.faceStatus {
-  font-size: 12px;
-  margin-bottom: 5px;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-
-  50% {
-    transform: scale(1.05);
-    opacity: 0.7;
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-}
-
-.settingsIcon {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 10;
-}
-
-
-
-/* WEBVIEW OVERLAY */
-.hidden {
-  display: none !important;
-}
-
-.webWrap {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 100;
-}
-
-.topBar {
-  padding: 8px;
-  background: #eee;
-  display: flex;
-  gap: 10px;
-}
-
-#webview {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-}
-
-/* ========================================
-   RESPONSIVE DESIGN - MEDIA QUERIES
-   ======================================== */
-
-/* Tablet - Large (max-width: 1024px) */
-@media screen and (max-width: 1024px) {
-  .dashboard {
-    grid-template-columns: 200px 1fr 280px;
-    padding: 15px;
-    gap: 15px;
-  }
-
-  .desktopLabel {
-    font-size: 12px;
-    top: 20px;
-    left: 20px;
-  }
-
-  .searchContainer {
-    width: 90%;
-    padding: 8px 15px;
-  }
-
-  .widget {
-    width: 160px;
-    height: 150px;
-  }
-
-  #selfieVideo {
-    width: 180px;
-    height: 180px;
-  }
-
-  .exerciseCard {
-    max-height: 350px;
-  }
-}
-
-/* Tablet - Medium (max-width: 768px) */
-@media screen and (max-width: 768px) {
-  .dashboard {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    padding: 10px;
-    gap: 15px;
-  }
-
-  .leftPanel,
-  .rightPanel {
-    flex-direction: row;
-    gap: 15px;
-    height: auto;
-  }
-
-  .leftPanel .card,
-  .rightPanel .card {
-    flex: 1;
-    max-height: 200px;
-  }
-
-  .exerciseCard {
-    max-height: 300px;
-  }
-
-  .faceCard {
-    max-height: 200px;
-  }
-
-  #selfieVideo {
-    width: 150px;
-    height: 150px;
-  }
-
-  .searchContainer {
-    width: 95%;
-  }
-
-  .widgetsRow {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .widget {
-    width: 140px;
-    height: 140px;
-    font-size: 12px;
-  }
-
-  .quickApps {
-    gap: 10px;
-  }
-
-  .appCircle {
-    width: 40px;
-    height: 40px;
-  }
-
-  .playButton {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-  }
-
-  .settingsIcon {
-    font-size: 20px;
-  }
-}
-
-/* Mobile - Large (max-width: 480px) */
-@media screen and (max-width: 480px) {
-  .dashboard {
-    padding: 8px;
-    gap: 10px;
-  }
-
-  .desktopLabel {
-    font-size: 10px;
-    top: 15px;
-    left: 15px;
-  }
-
-  .leftPanel,
-  .rightPanel {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .leftPanel .card,
-  .rightPanel .card {
-    max-height: none;
-  }
-
-  .musicCard {
-    height: 80px;
-    padding: 10px;
-  }
-
-  .musicHeader {
-    font-size: 12px;
-    margin-bottom: 8px;
-  }
-
-  .musicControls button {
-    font-size: 16px;
-  }
-
-  .faceCard {
-    max-height: 150px;
-    padding: 10px;
-  }
-
-  .facesilhouette {
-    font-size: 40px;
-    margin-top: 8px;
-  }
-
-  .exerciseCard {
-    max-height: 280px;
-  }
-
-  .exerciseCard h3 {
-    font-size: 12px;
-  }
-
-  #exerciseStatus,
-  #exerciseCount {
-    font-size: 11px;
-  }
-
-  #selfieVideo {
-    width: 120px;
-    height: 120px;
-  }
-
-  .exerciseOverlay {
-    font-size: 9px;
-  }
-
-  .searchContainer {
-    width: 100%;
-    padding: 6px 12px;
-  }
-
-  .g-logo {
-    font-size: 20px;
-    margin-right: 10px;
-  }
-
-  #searchInput {
-    font-size: 14px;
-  }
-
-  .searchIcons svg {
-    width: 20px;
-    height: 20px;
-  }
-
-  .quickApps {
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .appCircle {
-    width: 35px;
-    height: 35px;
-  }
-
-  .widgetsRow {
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .widget {
-    width: 100%;
-    max-width: 280px;
-    height: 120px;
-    font-size: 11px;
-  }
-
-  .playButton {
-    width: 35px;
-    height: 35px;
-    font-size: 14px;
-    bottom: 15px;
-    left: 15px;
-  }
-
-  .settingsIcon {
-    font-size: 18px;
-    bottom: 15px;
-    right: 15px;
-  }
-
-}
-
-/* Mobile - Small (max-width: 320px) */
-@media screen and (max-width: 320px) {
-  .dashboard {
-    padding: 5px;
-    gap: 8px;
-  }
-
-  #selfieVideo {
-    width: 100px;
-    height: 100px;
-  }
-
-  .widget {
-    max-width: 100%;
-    height: 100px;
-  }
-
-  .appCircle {
-    width: 30px;
-    height: 30px;
-  }
-
-  .facesilhouette {
-    font-size: 35px;
-  }
+  margin: 10px 0;
+  border: 4px solid rgba(255, 255, 255, 0.1);
 }
 
 /* GLOBAL BOTTOM BROWSER BAR */
@@ -710,101 +287,86 @@ html {
   left: 0;
   width: 100%;
   z-index: 1000;
-  background: rgba(45, 30, 60, 0.6);
-  backdrop-filter: blur(20px);
+  background: rgba(30, 20, 40, 0.95);
+  backdrop-filter: blur(25px);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  flex-direction: column;
-  padding: 5px 0;
+  padding: 0;
+  /* No global padding for ultra-slim */
 }
 
-/* Bookmark Bar */
 .bookmarkBar {
   display: flex;
-  gap: 15px;
-  padding: 5px 20px;
+  gap: 12px;
+  padding: 2px 20px;
+  /* Minimal padding */
   overflow-x: auto;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.bookmarkBar::-webkit-scrollbar {
-  display: none;
 }
 
 .bookmarkItem {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 20px;
+  gap: 5px;
+  padding: 2px 8px;
+  /* Extra slim items */
+  border-radius: 4px;
+  /* More rectangular like Chrome */
   cursor: pointer;
-  white-space: nowrap;
+  font-size: 11px;
   transition: background 0.2s;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.9);
 }
 
 .bookmarkItem:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.bookmarkItem img {
-  width: 16px;
-  height: 16px;
-  border-radius: 2px;
-}
-
-.folderIcon {
-  font-size: 14px;
-  opacity: 0.7;
-}
-
-/* Navigation Bar */
 .navigationBar {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 8px 20px;
+  gap: 10px;
+  padding: 4px 20px;
+  /* Ultra-slim navigation bar */
 }
 
-.navControls {
-  display: flex;
-  gap: 5px;
-}
-
-.navControls button {
+.navControls button,
+.extraTools button {
   background: transparent;
   border: none;
   color: white;
-  font-size: 20px;
+  font-size: 14px;
+  /* Smaller for slim bar */
   cursor: pointer;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 28px;
+  /* Ultra-slim buttons */
+  height: 28px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
-.navControls button:hover {
+.navControls button:hover,
+.extraTools button:hover {
   background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.extraTools button:active {
+  transform: translateY(0) scale(0.95);
 }
 
 .urlInputWrapper {
   flex: 1;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 25px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  /* Flatter look */
   display: flex;
   align-items: center;
-  padding: 0 15px;
-  height: 36px;
-}
-
-.searchIcon {
-  font-size: 14px;
-  margin-right: 10px;
-  opacity: 0.5;
+  padding: 0 10px;
+  height: 26px;
+  /* Ultra-slim url bar */
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 #urlBar {
@@ -818,39 +380,294 @@ html {
 
 .extraTools {
   display: flex;
-  gap: 10px;
+  gap: 5px;
 }
 
-.extraTools button {
-  background: transparent;
+/* AI CHAT PANEL STYLES */
+.aiChatPanel {
+  position: fixed;
+  right: 25px;
+  bottom: 85px;
+  width: 380px;
+  height: 550px;
+  background: rgba(30, 20, 40, 0.85);
+  /* Deep premium tint */
+  backdrop-filter: blur(30px) saturate(150%);
+  -webkit-backdrop-filter: blur(30px) saturate(150%);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  z-index: 2000;
+  animation: slidePanelUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+@keyframes slidePanelUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.chatHeader {
+  background: linear-gradient(90deg, rgba(160, 108, 213, 0.2), rgba(98, 71, 170, 0.2));
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chatMessages {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.messageContent {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 5px;
+}
+
+.messageText {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  max-width: 85%;
+  line-height: 1.5;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.userMessage .messageText {
+  background: linear-gradient(135deg, #a06cd5 0%, #6247aa 100%);
+  color: white;
+}
+
+.chatInputArea {
+  padding: 15px 20px;
+  display: flex;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+#chatInput {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 8px 18px;
+  color: white;
+  font-size: 13px;
+  outline: none;
+}
+
+#sendChatBtn {
+  background: #a06cd5;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+}
+
+.chatHeaderTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+.aiIcon {
+  font-size: 20px;
+}
+
+.closeChatBtn,
+.closePanelBtn {
+  background: rgba(255, 255, 255, 0.05);
   border: none;
   color: white;
-  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.2s;
+  transition: background 0.2s;
+  font-size: 14px;
 }
 
-.extraTools button:hover {
-  opacity: 1;
+.closeChatBtn:hover,
+.closePanelBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
-/* Adjust Dashboard and Webview for bottom bar */
-.dashboard {
-  padding-bottom: 100px;
-  /* Space for the bottom bar */
+/* Redesign robot button within taskbar */
+#aiChatBtn {
+  position: relative;
+  font-size: 16px;
+  /* Scaled down for ultra-slim */
 }
 
-.webWrap {
-  height: calc(100vh - 85px);
-  /* Adjusted to leave room for bottom bar */
+#aiChatBtn:hover {
+  transform: scale(1.1);
+  background: rgba(160, 108, 213, 0.3);
 }
 
-#webview {
-  border: none;
+/* AI Chat Button Pulse & Online Indicator */
+#aiChatBtn::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background: #4CAF50;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.8);
+  border: 1.5px solid #1e1428;
+  animation: pulseGreen 2s infinite;
 }
 
-/* Hide original top bar elements if any remained */
-.urlBarArea {
-  display: none !important;
+@keyframes pulseGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+
+/* WALLPAPER PANEL */
+.wallpaperPanel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 480px;
+  background: rgba(30, 20, 40, 0.85);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  border-radius: 24px;
+  padding: 30px;
+  z-index: 3000;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  animation: modalScaleIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.panelHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.wallpaperGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.wallpaperOption {
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.wallpaperOption:hover {
+  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.wallpaperOption.active {
+  border-color: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.uploadOption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.6);
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+}
+
+.uploadOption:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.uploadOption span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .webWrap {
+    height: calc(100vh - 120px);
+  }
+
+  .aiChatPanel {
+    width: calc(100vw - 40px);
+    left: 20px;
+  }
 }

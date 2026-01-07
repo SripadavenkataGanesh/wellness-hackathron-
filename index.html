@@ -10,6 +10,9 @@
 </head>
 
 <body>
+    <!-- BACKGROUND LAYER -->
+    <div id="browserBackground" class="browserBackground"></div>
+    <div class="backgroundOverlay"></div>
 
     <!-- DASHBOARD -->
     <div id="dashboard" class="dashboard">
@@ -168,12 +171,72 @@
                 <button id="cameraBtn" title="Camera">📷</button>
                 <button id="downloadBtn" title="Downloads">📥</button>
                 <button id="layersBtn" title="Extensions">🧱</button>
+                <button id="aiChatBtn" title="AI Assistant">🤖</button>
+                <button id="customizeBtn" title="Customize Wallpaper">🖼️</button>
                 <button id="menuBtn" title="Menu">≡</button>
                 <button id="homeBtn" title="Home">⚙️</button>
             </div>
-        </div>
-    </div>
-    <script src="renderer.js"></script>
+
+            <!-- AI CHATBOT PANEL -->
+            <div id="aiChatPanel" class="aiChatPanel hidden">
+                <div class="chatHeader">
+                    <div class="chatHeaderTitle">
+                        <span class="aiIcon">🤖</span>
+                        <span>AI Wellness Assistant</span>
+                    </div>
+                    <button id="closeChatBtn" class="closeChatBtn" title="Close">✕</button>
+                </div>
+                <div id="chatMessages" class="chatMessages">
+                    <div class="aiMessage">
+                        <div class="messageContent">
+                            <span class="aiAvatar">🤖</span>
+                            <div class="messageText">Hello! I'm your AI assistant. How can I help you today?</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chatInputArea">
+                    <input type="text" id="chatInput" placeholder="Ask me anything..." />
+                    <button id="sendChatBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 8L11 13" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- WALLPAPER PICKER PANEL -->
+            <div id="wallpaperPanel" class="wallpaperPanel hidden">
+                <div class="panelHeader">
+                    <h3>Customize Appearance</h3>
+                    <button id="closeWallpaperBtn" class="closePanelBtn">✕</button>
+                </div>
+                <div class="wallpaperGrid">
+                    <div class="wallpaperOption" data-bg="default" style="background: #241b2f;"></div>
+                    <div class="wallpaperOption"
+                        data-bg="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80"
+                        style="background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=100&q=80');">
+                    </div>
+                    <div class="wallpaperOption"
+                        data-bg="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
+                        style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=100&q=80');">
+                    </div>
+                    <div class="wallpaperOption"
+                        data-bg="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=400&q=80"
+                        style="background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=100&q=80');">
+                    </div>
+                    <div class="wallpaperOption"
+                        data-bg="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80"
+                        style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=100&q=80');">
+                    </div>
+                    <div class="wallpaperOption uploadOption" id="uploadWallpaperBtn">
+                        <span>+</span>
+                        <input type="file" id="wallpaperUpload" accept="image/*" class="hidden" />
+                    </div>
+                </div>
+            </div>
+
+            <script src="renderer.js"></script>
 </body>
 
 </html>

@@ -4,9 +4,9 @@
   "main": "main.js",
   "private": true,
   "scripts": {
-    "start": "electron-nightly ."
+    "start": "electron ."
   },
   "devDependencies": {
-    "electron-nightly": "^41.0.0-nightly.20251219"
+    "electron": "^39.2.7"
   }
 }

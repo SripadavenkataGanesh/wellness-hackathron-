@@ -306,3 +306,182 @@ async function startCamera() {
 
 startCamera();
 
+// ------------------- AI CHATBOT FUNCTIONALITY -------------------
+const aiChatPanel = document.getElementById("aiChatPanel");
+const aiChatBtn = document.getElementById("aiChatBtn");
+const closeChatBtn = document.getElementById("closeChatBtn");
+const chatInput = document.getElementById("chatInput");
+const sendChatBtn = document.getElementById("sendChatBtn");
+const chatMessages = document.getElementById("chatMessages");
+
+// Toggle chat panel
+function toggleChatPanel() {
+    aiChatPanel.classList.toggle("hidden");
+    if (!aiChatPanel.classList.contains("hidden")) {
+        chatInput.focus();
+    }
+}
+
+// Open chat panel
+aiChatBtn.onclick = toggleChatPanel;
+
+// Close chat panel
+closeChatBtn.onclick = () => {
+    aiChatPanel.classList.add("hidden");
+};
+
+// Add message to chat
+function addMessage(text, isUser = false) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = isUser ? "userMessage" : "aiMessage";
+
+    const avatar = isUser ? "👤" : "🤖";
+    const avatarClass = isUser ? "userAvatar" : "aiAvatar";
+
+    messageDiv.innerHTML = `
+        <div class="messageContent">
+            <span class="${avatarClass}">${avatar}</span>
+            <div class="messageText">${text}</div>
+        </div>
+    `;
+
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Send message
+async function sendMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    // Add user message
+    addMessage(message, true);
+    chatInput.value = "";
+
+    // Show typing indicator
+    const typingDiv = document.createElement("div");
+    typingDiv.className = "aiMessage typing-indicator";
+    typingDiv.id = "typingIndicator";
+    typingDiv.innerHTML = `
+        <div class="messageContent">
+            <span class="aiAvatar">🤖</span>
+            <div class="messageText">Typing...</div>
+        </div>
+    `;
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    try {
+        // Call backend API
+        const response = await fetch(`${BACKEND_URL}/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: message })
+        });
+
+        const data = await response.json();
+
+        // Remove typing indicator
+        const indicator = document.getElementById("typingIndicator");
+        if (indicator) indicator.remove();
+
+        // Add AI response
+        addMessage(data.response || "I'm here to help! How can I assist you?", false);
+
+    } catch (error) {
+        console.error("Chat error:", error);
+
+        // Remove typing indicator
+        const indicator = document.getElementById("typingIndicator");
+        if (indicator) indicator.remove();
+
+        // Fallback response
+        const fallbackResponses = [
+            "I'm here to help you with your wellness journey! What would you like to know?",
+            "That's an interesting question! I can help you with wellness tips, exercise tracking, or general browsing assistance.",
+            "I'm your AI wellness assistant. Feel free to ask me about health tips, exercises, or anything else!",
+            "Great question! I'm designed to support your wellness goals. How can I assist you today?",
+            "I'm always here to help! Whether it's about fitness, nutrition, or just browsing, I've got you covered."
+        ];
+        const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+        addMessage(randomResponse, false);
+    }
+}
+
+// Send button click
+sendChatBtn.onclick = sendMessage;
+
+// Enter key to send
+chatInput.onkeydown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+};
+
+// Close chat panel when clicking outside
+document.addEventListener("click", (e) => {
+    if (!aiChatPanel.contains(e.target) && e.target !== aiChatBtn && !aiChatPanel.classList.contains("hidden")) {
+        // Don't close if clicking inside the panel
+        if (!e.target.closest(".aiChatPanel") && e.target !== aiChatBtn) {
+            // aiChatPanel.classList.add("hidden");
+        }
+    }
+});
+
+// ------------------- WALLPAPER CUSTOMIZATION -------------------
+const browserBackground = document.getElementById("browserBackground");
+const wallpaperPanel = document.getElementById("wallpaperPanel");
+const closeWallpaperBtn = document.getElementById("closeWallpaperBtn");
+const wallpaperOptions = document.querySelectorAll(".wallpaperOption");
+const wallpaperUpload = document.getElementById("wallpaperUpload");
+const uploadWallpaperBtn = document.getElementById("uploadWallpaperBtn");
+const customizeBtn = document.getElementById("customizeBtn");
+
+function setWallpaper(src) {
+    if (src === "default" || !src) {
+        browserBackground.style.backgroundImage = "none";
+        localStorage.removeItem("customWallpaper");
+    } else {
+        browserBackground.style.backgroundImage = `url('${src}')`;
+        localStorage.setItem("customWallpaper", src);
+    }
+
+    // Update active state in grid
+    wallpaperOptions.forEach(opt => {
+        if (opt.dataset.bg === src) opt.classList.add("active");
+        else opt.classList.remove("active");
+    });
+}
+
+// Load saved wallpaper
+const savedWallpaper = localStorage.getItem("customWallpaper");
+if (savedWallpaper) setWallpaper(savedWallpaper);
+
+// Toggle Panel
+if (customizeBtn) customizeBtn.onclick = () => wallpaperPanel.classList.toggle("hidden");
+closeWallpaperBtn.onclick = () => wallpaperPanel.classList.add("hidden");
+
+// Option Clicks
+wallpaperOptions.forEach(option => {
+    option.addEventListener("click", () => {
+        if (!option.id.includes("upload")) {
+            setWallpaper(option.dataset.bg);
+        }
+    });
+});
+
+// Custom Upload
+uploadWallpaperBtn.onclick = () => wallpaperUpload.click();
+wallpaperUpload.onchange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            setWallpaper(event.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+

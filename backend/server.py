@@ -250,6 +250,46 @@ def search_spotify(q: str):
             "note": "Missing Spotify Credentials. Using mock fallback. Add SPOTIPY_CLIENT_ID to .env"
         }
 
+@app.post("/api/chat")
+def chat_with_ai(req: ResolveRequest):
+    """
+    AI Chatbot endpoint - provides intelligent responses to user queries
+    """
+    message = req.query.strip().lower()
+    
+    # Simple keyword-based responses (can be replaced with actual AI API)
+    responses = {
+        "hello": "Hello! I'm your AI wellness assistant. How can I help you today?",
+        "hi": "Hi there! Ready to support your wellness journey. What can I do for you?",
+        "help": "I can help you with:\n• Wellness and fitness tips\n• Exercise tracking guidance\n• General browsing assistance\n• Health recommendations\n\nWhat would you like to know?",
+        "exercise": "Great choice! Regular exercise is key to wellness. I can track your squats using the camera feature. Try doing some squats and I'll count them for you!",
+        "fitness": "Fitness is a journey, not a destination! I recommend:\n• 30 minutes of daily activity\n• Mix cardio and strength training\n• Stay hydrated\n• Get enough rest\n\nWhat specific fitness goals do you have?",
+        "wellness": "Wellness encompasses physical, mental, and emotional health. Key tips:\n• Regular exercise\n• Balanced nutrition\n• Quality sleep (7-9 hours)\n• Stress management\n• Social connections\n\nWhich area would you like to focus on?",
+        "health": "Your health is your wealth! I can help you:\n• Track your exercise\n• Provide wellness tips\n• Monitor your movement\n• Suggest healthy habits\n\nWhat health topic interests you?",
+        "music": "Music is great for wellness! Use the Spotify Hub on the left to search for your favorite tracks. Music can boost mood, reduce stress, and enhance workouts!",
+        "spotify": "You can search for music using the Spotify Hub in the sidebar. Just type a song or artist name and click search!",
+        "squat": "Squats are excellent for building lower body strength! Stand in front of the camera and I'll count your squats automatically. Keep your back straight and knees aligned!",
+        "thank": "You're welcome! I'm always here to help with your wellness journey. 😊",
+        "thanks": "My pleasure! Feel free to ask me anything anytime. 🤖",
+        "bye": "Goodbye! Stay healthy and keep moving! 👋",
+    }
+    
+    # Check for keywords in message
+    response = None
+    for keyword, reply in responses.items():
+        if keyword in message:
+            response = reply
+            break
+    
+    # Default response if no keyword matched
+    if not response:
+        if "?" in message:
+            response = "That's a great question! As your AI wellness assistant, I'm here to help with fitness, health tips, and browsing. Could you tell me more about what you're looking for?"
+        else:
+            response = "I'm here to support your wellness journey! I can help with exercise tracking, health tips, and general assistance. What would you like to know?"
+    
+    return {"response": response, "status": "success"}
+
 if __name__ == '__main__':
     # Run with uvicorn
     uvicorn.run(app, host='0.0.0.0', port=5000)
