@@ -306,14 +306,21 @@ html {
 .bookmarkItem {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 2px 8px;
-  /* Extra slim items */
-  border-radius: 4px;
-  /* More rectangular like Chrome */
+  gap: 8px;
+  /* Slightly more space for clarity */
+  padding: 4px 10px;
+  /* Restored comfortable padding */
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 11px;
-  transition: background 0.2s;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.bookmarkItem img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 .bookmarkItem:hover {
@@ -323,9 +330,16 @@ html {
 .navigationBar {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 4px 20px;
-  /* Ultra-slim navigation bar */
+  gap: 12px;
+  padding: 6px 20px;
+  /* Slightly more padding for better alignment */
+}
+
+.navControls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  /* Tight horizontal packing */
 }
 
 .navControls button,
@@ -333,17 +347,21 @@ html {
   background: transparent;
   border: none;
   color: white;
-  font-size: 14px;
-  /* Smaller for slim bar */
+  font-size: 20px;
+  /* Restored size for navigation arrows to be readable */
   cursor: pointer;
-  width: 28px;
-  /* Ultra-slim buttons */
-  height: 28px;
-  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+}
+
+#reloadBtn {
+  font-size: 16px;
+  /* Reload icon usually looks better slightly smaller than arrows */
 }
 
 .navControls button:hover,
